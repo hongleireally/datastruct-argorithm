@@ -17,6 +17,7 @@ Status initList(DuLinkList &l);
 Status addElem(DuLinkList l, int val);
 Node* getElem(DuLinkList l, int index);
 Status insertElem(DuLinkList l, int index, int val);
+Status delElem(DuLinkList list, int index);
 void printList(DuLinkList l);
 
 int main() {
@@ -26,8 +27,10 @@ int main() {
     addElem(l, 2);
     addElem(l, 3);
     printList(l);
-//    insertElem(l, 5, 4);
-//    printList(l);
+    insertElem(l, 1, 4);
+    printList(l);
+    delElem(l, 3);
+    printList(l);
     return 0;
 }
 
@@ -60,8 +63,9 @@ Node* getElem(DuLinkList l, int index) {
     Node* head = l;
     l = l->next;
     int i=1;
-    while (l != head && i++<index) {
+    while (l != head && i<index) {
         l = l->next;
+        i++;
     }
     if (l == head || i != index) {
         return 0;
@@ -87,6 +91,17 @@ Status insertElem(DuLinkList l, int index, int val) {
     l->prior->next = node;
     l->prior = node;
     return 1;
+}
+
+Status delElem(DuLinkList list, int index) {
+    Node* p;
+    if (!(p = getElem(list, index))) {
+        return 0;
+    }
+    p->prior->next = p->next;
+    p->next->prior = p->prior;
+    free(p);
+    return OK;
 }
 
 void printList(DuLinkList l) {
