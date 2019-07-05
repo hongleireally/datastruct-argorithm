@@ -25,7 +25,7 @@ typedef struct {
  * @return
  */
 Status initList(SLinkedList list);
-Status addElem(SLinkedList list, int val);
+Status addElem(SLinkedList list, int &s, int val);
 Status emptyList(SLinkedList list);
 /**
  * 拿到备用链表的第一个节点，即获取第一个空元素的下标
@@ -47,8 +47,11 @@ void printList(SLinkedList list, int s);
 
 int main() {
     SLinkedList list;
-    int s;
-    diffrence(list, s);
+    int s = NULL;
+    initList(list);
+    addElem(list, s, 1);
+    addElem(list, s, 3);
+    addElem(list, s, 1);
     printList(list, s);
 }
 
@@ -61,8 +64,29 @@ Status initList(SLinkedList list) {
     return OK;
 }
 
-Status addElem(SLinkedList list, int val) {
-
+Status addElem(SLinkedList list, int &s, int val) {
+    int index;
+    if (!s) {
+        mallocList(list, s);
+        mallocList(list, index);
+        list[index].data = val;
+        list[s].cur = index;
+        list[index].cur = 0;
+        return OK;
+    }
+    int cur;
+    index = s;
+    cur = list[s].cur;
+    while (cur) {
+        index = cur;
+        cur = list[cur].cur;
+    }
+    int p;
+    mallocList(list, p);
+    list[p].data = val;
+    list[index].cur = p;
+    list[p].cur = 0;
+    return OK;
 }
 
 Status emptyList(SLinkedList list) {
